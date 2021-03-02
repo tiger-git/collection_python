@@ -34,7 +34,15 @@ class Human(object):
             print(F'年龄值错误，{e}')
         print(F"{self.name}当前年龄为{self.age}")
 
+    def __new__(cls, *args, **kwargs):
+        cls.get_time()
+        cls.introduce(cls)
+        print('hello', args, kwargs)
+        # return object.__new__(cls)
+        return super(Human, cls).__new__(cls)
+
     def __init__(self, name, age, sex):  # 归属实例方法
+        print(name, age, sex)
         self._sex = sex
         self._name = name
         self._age = age
@@ -64,7 +72,6 @@ class Human(object):
         elif not self.eat_thing:
             self.eat_thing = default
         data = F"{self.name}在吃{self.eat_thing}？"
-
         print(data)
         return data
 
@@ -117,7 +124,7 @@ class Boy(Human):
         return data
 
 
-h = Human("Jenny", 18, '女')  # 实例化一个对象
+# h = Human("Jenny", 18, '女')  # 实例化一个对象
 # h.eat('汉堡')  # 实例方法调用1(对象，常规)
 # Human.eat(h, '汉堡')  # 实例方法调用2（类名调用）
 # h.__init__('John', 20, '男')  # 对象调用实例方法（重新初始化）
@@ -148,7 +155,7 @@ h = Human("Jenny", 18, '女')  # 实例化一个对象
 # h1.introduce()
 # h2.introduce()
 # TODO 类的继承，多肽
-b = Boy(18, '小明')
+# b = Boy(18, '小明')
 # Human.eat(b)  # 对象调用父类方法
 # b.eat()  # 对象调用子类方法（覆盖或重写父类的方法）
 # b.introduce()  # 继承父类的方法
@@ -157,9 +164,9 @@ b = Boy(18, '小明')
 # print(b.age)
 # b.age = 101
 # print(b.__doc__)  # 文档字符串，介绍
-print(b.__dict__)  # 对象，属性值
-print(dir(b))
-import inspect
+# print(b.__dict__)  # 对象，属性值
+# print(dir(b))
+# import inspect
 # print(inspect.getsource(Boy))#获取源码
 # print(inspect.getsource(b.eat))
 # print(inspect.getargspec(b.eat))

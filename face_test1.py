@@ -1,4 +1,4 @@
-# 面试题
+# 面试题1（阿里）
 
 data = {
     "全球": [
@@ -32,6 +32,10 @@ example = [
 # 注:连续出现2次以上持续加一，例如连续两次加1，连续第三次则再加1
 # 通过1,2,3，用代码求出example中1级，2级，3级1的次数。
 
+# 答案
+# 3级:17(正确)
+# 2级:8（正确）
+# 1级:3（未知）
 
 [
     [1, 0, 1, 0, 1, 0, 0, 1, 1],
@@ -44,15 +48,16 @@ example = [
     [1, 1, 1, 1, 0, 1, 1, 1, 0]
 ]
 
+#   中　美　英
 [
     [1, 0, 1],
     [1, 1, 1],
     [0, 0, 0],
     [1, 1, 1],
     [0, 1, 1],
-    [0, 0, 0],
+    [1, 1, 0],
     [1, 0, 1],
-    [0, 1, 1]
+    [1, 1, 1]
 ]
 
 
@@ -80,64 +85,6 @@ class Country(object):
                     )
             new_data.append(value)
 
-    def add_1(self, obj: int):
-        self.first += obj
-        return
-
-    def add_2(self, obj: int):
-        self.second += obj
-
-    def add_3(self, obj: int):
-        self.third += obj
-
-    def add_data(self, data_dict: dict, country: str):
-        if country == '中国':
-            key = self.China
-        elif country == '美国':
-            key = self.America
-        elif country == '英国':
-            key = self.England
-        else:
-            print('error')
-            return
-        for k in key:
-            data_dict[k] += 1
-        return data_dict
-
-    def handle_data(self, data: list):
-        for index, i in enumerate(data):
-            self.handle_dict(data, i, index)
-        return
-
-    def handle_dict(self, data: list, obj: dict, index):
-        key = list(obj.keys())
-        value = list(obj.values())
-        China = value[:3]
-        America = value[3:6]
-        England = value[6:9]
-        # reback = False
-        for c in self.earth_country:
-            if c == '中国' and China.count(1) == 2:
-                self.add_3(1)
-                # self.add_3(China.count(1))
-                # reback = True
-                # break
-            if c == '美国' and America.count(1) == 2:
-                self.add_3(1)
-                # self.add_3(America.count(1))
-                # reback = True
-                # break
-            if c == '英国' and England.count(1) == 2:
-                self.add_3(1)
-                # self.add_3(England.count(1))
-                # reback = True
-                # break
-        # if reback:
-        # print(index,c)
-        # data[index] = self.add_data(obj, c)
-        # self.handle_data(data)
-        return
-
     def get_third(self, data):
         self.third_data = [list(x.values()) for x in data]
         second_data = []
@@ -145,8 +92,8 @@ class Country(object):
             second_dict = dict()
             for i, c in enumerate(self.country):
                 value = x[i * 3:(i + 1) * 3]
-                if value.count(1) == 2:
-                    self.add_3(1)
+                if value.count(1) >= 2:
+                    self.third += 1
                     second_dict[c] = 1
                 else:
                     second_dict[c] = 0
@@ -155,16 +102,18 @@ class Country(object):
         return
 
     def get_second(self):
-        second = 0
-        for x in range(3):
+        for x in range(len(self.country)):
             data = [s[x] for s in self.second_data]
-            second += data.count(1) - 1
-        self.second = second
+            for d in range(len(data) - 1):
+                if data[d] == data[d + 1] == 1:
+                    self.second += 1
         return
 
     def get_first(self):
-        data = list(map(lambda x: x.count(1), self.second_data))
-        self.first = data.count(2)
+        data = self.second_data
+        for x in range(len(self.second_data) - 1):
+            if data[x].count(1) >= 2 and data[x + 1].count(1) >= 2:
+                self.first += 1
         return
 
     def run(self, data):
@@ -175,11 +124,54 @@ class Country(object):
         self.get_first()
         # print(data[0].values())
         print(self.second_data)
-        print(self.first)
-        print(self.second)
-        print(self.third)
+        print(F"1级1的次数为{self.first}")
+        print(F"2级1的次数为{self.second}")
+        print(F"3级1的次数为{self.third}")
         return
 
 
-handle = Country(data)
-handle.run(example)
+# handle = Country(data)
+# handle.run(example)
+
+# TODO 面试题2(阿里)
+# # 对一个整型数组a，和一个整数sum，找到数组a中两数之和等于sum的数对的下标，假设有且仅有一对满足，要求时间复杂度O(n)
+# 如:
+# a = [1, 5, 11, 2, 2, 7]
+# sum = 4
+
+# import copy
+# a = [1, 5, 11, 2, 2, 7]
+# sum = 18
+# new_a = copy.deepcopy(a)
+# new_a.sort()
+# for x in new_a:
+#     try:
+#         other_index = new_a.index(sum-x)
+#         value = new_a[other_index]
+#         print(F"其中一个值为{x},原索引为{a.index(x)};另一个值为{value},原索引为{a.index(value)}")
+#         break
+#     except:
+#         print(F"No {x}")
+#         continue
+
+
+# TODO 面试题3(华为)
+# 如：连续正整数数组　l=[1,2,3,4]
+# 连续正整数数组和　s=10,数组个数（长度） n为4，　0<s<100000,0<n<100000
+# 求数组l
+l = []
+
+
+def face_3(s, n):
+    s_n = (n - 1) * n / 2
+    x = int((s - s_n) / n)
+    if x < 0:
+        return -1
+    for i in range(n):
+        l.append(x + i)
+    return l
+
+# print(face_3(3, 5))
+# print(face_3(526, 6))
+# print(face_3(10, 4))
+
